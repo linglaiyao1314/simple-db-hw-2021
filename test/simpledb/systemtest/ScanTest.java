@@ -5,7 +5,7 @@ import simpledb.common.DbException;
 import simpledb.common.Utility;
 import simpledb.execution.SeqScan;
 import simpledb.storage.*;
-
+//import java.simpledb.storage.*;
 import static org.junit.Assert.*;
 
 import java.io.File;

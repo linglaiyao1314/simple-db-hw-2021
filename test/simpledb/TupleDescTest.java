@@ -173,6 +173,11 @@ public class TupleDescTest extends SimpleDbTestBase {
         assertEquals(intString2, intString);
     }
 
+    @Test
+    public void testPrint(){
+        TupleDesc td = Utility.getTupleDesc(10, "asd");
+        System.out.println(td);
+    }
     /**
      * JUnit suite target
      */
