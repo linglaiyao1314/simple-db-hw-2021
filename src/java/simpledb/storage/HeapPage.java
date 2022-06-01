@@ -2,7 +2,6 @@ package simpledb.storage;
 
 import simpledb.common.Database;
 import simpledb.common.DbException;
-import simpledb.common.Debug;
 import simpledb.common.Catalog;
 import simpledb.transaction.TransactionId;
 
@@ -73,7 +72,7 @@ public class HeapPage implements Page {
     */
     private int getNumTuples() {        
         // some code goes here
-        return 0;
+        return (int) Math.floor(BufferPool.getPageSize() * 8.0 / (this.td.getSize() * 8.0 + 1));
 
     }
 
@@ -81,10 +80,9 @@ public class HeapPage implements Page {
      * Computes the number of bytes in the header of a page in a HeapFile with each tuple occupying tupleSize bytes
      * @return the number of bytes in the header of a page in a HeapFile with each tuple occupying tupleSize bytes
      */
-    private int getHeaderSize() {        
-        
+    private int getHeaderSize() {
         // some code goes here
-        return 0;
+        return (int) Math.ceil(numSlots / 8.0);
                  
     }
     
@@ -118,7 +116,7 @@ public class HeapPage implements Page {
      */
     public HeapPageId getId() {
     // some code goes here
-    throw new UnsupportedOperationException("implement this");
+        return pid;
     }
 
     /**
@@ -288,7 +286,12 @@ public class HeapPage implements Page {
      */
     public int getNumEmptySlots() {
         // some code goes here
-        return 0;
+        int s = 0;
+        for (int i=0; i < header.length * 8; i++)
+            if(!isSlotUsed(i)){
+                s += 1;
+            }
+        return s;
     }
 
     /**
@@ -296,7 +299,14 @@ public class HeapPage implements Page {
      */
     public boolean isSlotUsed(int i) {
         // some code goes here
-        return false;
+        int headerPos = i / 8;
+        int diff = i % 8;
+        byte elem = header[headerPos];
+        if(elem < 0){
+            return true;
+        }
+        int isUsed = (elem >> diff) & 0x1;
+        return isUsed == 1;
     }
 
     /**
@@ -307,13 +317,37 @@ public class HeapPage implements Page {
         // not necessary for lab1
     }
 
+    private class TupleIterator implements Iterator<Tuple>{
+        private Tuple[] tuples;
+        private int pos;
+
+        public TupleIterator(Tuple[] tuples){
+            this.tuples = tuples;
+            this.pos = -1;
+        }
+
+        @Override
+        public boolean hasNext() {
+            pos += 1;
+            if(tuples[pos] == null){
+                return false;
+            }
+            return true;
+        }
+
+        @Override
+        public Tuple next() {
+            return tuples[pos];
+        }
+    }
+
     /**
      * @return an iterator over all tuples on this page (calling remove on this iterator throws an UnsupportedOperationException)
      * (note that this iterator shouldn't return tuples in empty slots!)
      */
     public Iterator<Tuple> iterator() {
         // some code goes here
-        return null;
+        return new TupleIterator(tuples);
     }
 
 }

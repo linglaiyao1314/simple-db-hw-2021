@@ -22,6 +22,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * @Threadsafe
  */
 public class Catalog {
+    private ConcurrentHashMap<String, Integer> tableFileMap;
+    private ConcurrentHashMap<Integer, String> fileTableMap;
+    private ConcurrentHashMap<String, String> tablePkMap;
+    private ConcurrentHashMap<Integer, DbFile> files;
+
 
     /**
      * Constructor.
@@ -29,6 +34,10 @@ public class Catalog {
      */
     public Catalog() {
         // some code goes here
+        tableFileMap = new ConcurrentHashMap<>();
+        tablePkMap = new ConcurrentHashMap<>();
+        fileTableMap = new ConcurrentHashMap<>();
+        files = new ConcurrentHashMap<>();
     }
 
     /**
@@ -42,6 +51,10 @@ public class Catalog {
      */
     public void addTable(DbFile file, String name, String pkeyField) {
         // some code goes here
+        tablePkMap.put(name, pkeyField);
+        tableFileMap.put(name, file.getId());
+        files.put(file.getId(), file);
+        fileTableMap.put(file.getId(), name);
     }
 
     public void addTable(DbFile file, String name) {
@@ -65,7 +78,13 @@ public class Catalog {
      */
     public int getTableId(String name) throws NoSuchElementException {
         // some code goes here
-        return 0;
+        if(name == null){
+            throw new NoSuchElementException();
+        }
+        if(tableFileMap.get(name) == null){
+            throw new NoSuchElementException();
+        }
+        return tableFileMap.get(name);
     }
 
     /**
@@ -76,7 +95,8 @@ public class Catalog {
      */
     public TupleDesc getTupleDesc(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+        DbFile d = files.get(tableid);
+        return d.getTupleDesc();
     }
 
     /**
@@ -87,27 +107,32 @@ public class Catalog {
      */
     public DbFile getDatabaseFile(int tableid) throws NoSuchElementException {
         // some code goes here
-        return null;
+        return files.get(tableid);
     }
 
     public String getPrimaryKey(int tableid) {
-        // some code goes here
-        return null;
+        // some code goes here;
+        String table = fileTableMap.get(tableid);
+        return tablePkMap.get(table);
     }
 
     public Iterator<Integer> tableIdIterator() {
         // some code goes here
-        return null;
+        return files.keys().asIterator();
     }
 
     public String getTableName(int id) {
         // some code goes here
-        return null;
+        return fileTableMap.get(id);
     }
     
     /** Delete all tables from the catalog */
     public void clear() {
         // some code goes here
+        fileTableMap.clear();
+        tableFileMap.clear();
+        files.clear();
+        tablePkMap.clear();
     }
     
     /**

@@ -33,6 +33,9 @@ public class BufferPool {
     constructor instead. */
     public static final int DEFAULT_PAGES = 50;
 
+    private int numPages;
+    private ConcurrentHashMap<PageId, Page> pages;
+
     /**
      * Creates a BufferPool that caches up to numPages pages.
      *
@@ -40,6 +43,8 @@ public class BufferPool {
      */
     public BufferPool(int numPages) {
         // some code goes here
+        this.numPages = numPages;
+        pages = new ConcurrentHashMap<>();
     }
     
     public static int getPageSize() {
@@ -74,6 +79,13 @@ public class BufferPool {
     public  Page getPage(TransactionId tid, PageId pid, Permissions perm)
         throws TransactionAbortedException, DbException {
         // some code goes here
+        if(pages.size() >= numPages){
+            throw new DbException("pages full");
+        }
+        Page page = pages.get(pid);
+        if(page != null){
+            return page;
+        }
         return null;
     }
 
