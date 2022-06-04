@@ -7,6 +7,7 @@ import simpledb.common.DeadlockException;
 import simpledb.transaction.TransactionAbortedException;
 import simpledb.transaction.TransactionId;
 
+import javax.xml.crypto.Data;
 import java.io.*;
 
 import java.util.concurrent.ConcurrentHashMap;
@@ -85,6 +86,12 @@ public class BufferPool {
         Page page = pages.get(pid);
         if(page != null){
             return page;
+        }
+        // 不存在则将新的页缓存进来 todo 待实现页面驱逐策略
+        Page newPage = Database.getCatalog().getDatabaseFile(pid.getTableId()).readPage(pid);
+        if(newPage != null){
+            pages.put(pid, newPage);
+            return newPage;
         }
         return null;
     }

@@ -32,6 +32,7 @@ public class ScanTest extends SimpleDbTestBase {
     private void validateScan(int[] columnSizes, int[] rowSizes)
             throws IOException, DbException, TransactionAbortedException {
         for (int columns : columnSizes) {
+            System.out.println(columns + " .....");
             for (int rows : rowSizes) {
                 List<List<Integer>> tuples = new ArrayList<>();
                 HeapFile f = SystemTestUtil.createRandomHeapFile(columns, rows, null, tuples);
@@ -45,7 +46,11 @@ public class ScanTest extends SimpleDbTestBase {
     @Test public void testSmall() throws IOException, DbException, TransactionAbortedException {
         int[] columnSizes = new int[]{1, 2, 3, 4};
         int[] rowSizes =
-                new int[]{0, 1, 2, 511, 512, 513, 1023, 1024, 1025, 4096 + r.nextInt(4096)};
+                new int[]{
+//                        0, 1, 2, 511, 512, 513,
+                        1023,
+//                        1024, 1025, 4096 + r.nextInt(4096)
+        };
         validateScan(columnSizes, rowSizes);
     }
 

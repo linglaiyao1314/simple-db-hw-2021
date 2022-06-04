@@ -116,7 +116,7 @@ public class SystemTestUtil {
             throws DbException, TransactionAbortedException {
         List<List<Integer>> copy = new ArrayList<>(tuples);
 
-        if (Debug.isEnabled()) {
+        if (Debug.isEnabled(1)) {
             Debug.log("Expected tuples:");
             for (List<Integer> t : copy) {
                 Debug.log("\t" + Utility.listToString(t));

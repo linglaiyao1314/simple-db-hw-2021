@@ -329,10 +329,10 @@ public class HeapPage implements Page {
         @Override
         public boolean hasNext() {
             pos += 1;
-            if(tuples[pos] == null){
+            if(pos >= tuples.length){
                 return false;
             }
-            return true;
+            return tuples[pos] != null;
         }
 
         @Override
