@@ -13,7 +13,8 @@ import java.util.*;
 public class Filter extends Operator {
 
     private static final long serialVersionUID = 1L;
-
+    private Predicate p;
+    private OpIterator child;
     /**
      * Constructor accepts a predicate to apply and a child operator to read
      * tuples to filter from.
@@ -25,29 +26,36 @@ public class Filter extends Operator {
      */
     public Filter(Predicate p, OpIterator child) {
         // some code goes here
+        this.p = p;
+        this.child = child;
     }
 
     public Predicate getPredicate() {
         // some code goes here
-        return null;
+        return this.p;
     }
 
     public TupleDesc getTupleDesc() {
         // some code goes here
-        return null;
+        return this.child.getTupleDesc();
     }
 
     public void open() throws DbException, NoSuchElementException,
             TransactionAbortedException {
         // some code goes here
+        super.open();
+        this.child.open();
     }
 
     public void close() {
         // some code goes here
+        this.child.close();
+        super.close();
     }
 
     public void rewind() throws DbException, TransactionAbortedException {
         // some code goes here
+        this.child.rewind();
     }
 
     /**
@@ -61,7 +69,16 @@ public class Filter extends Operator {
      */
     protected Tuple fetchNext() throws NoSuchElementException,
             TransactionAbortedException, DbException {
-        // some code goes here
+        // 每次返回一条符合条件的Tuple
+        while (this.child.hasNext()){
+            Tuple t = this.child.next();
+            if(t == null){
+                return null;
+            }
+            if(this.p.filter(t)){
+                return t;
+            }
+        }
         return null;
     }
 
@@ -74,6 +91,7 @@ public class Filter extends Operator {
     @Override
     public void setChildren(OpIterator[] children) {
         // some code goes here
+
     }
 
 }

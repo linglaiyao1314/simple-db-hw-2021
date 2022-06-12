@@ -13,6 +13,10 @@ import java.util.*;
 public class Join extends Operator {
 
     private static final long serialVersionUID = 1L;
+    private JoinPredicate p;
+    private OpIterator child1;
+    private OpIterator child2;
+    private Tuple t1;
 
     /**
      * Constructor. Accepts two children to join and the predicate to join them
@@ -27,11 +31,14 @@ public class Join extends Operator {
      */
     public Join(JoinPredicate p, OpIterator child1, OpIterator child2) {
         // some code goes here
+        this.p = p;
+        this.child1 = child1;
+        this.child2 = child2;
     }
 
     public JoinPredicate getJoinPredicate() {
         // some code goes here
-        return null;
+        return this.p;
     }
 
     /**
@@ -60,20 +67,31 @@ public class Join extends Operator {
      */
     public TupleDesc getTupleDesc() {
         // some code goes here
-        return null;
+        return TupleDesc.merge(this.child1.getTupleDesc(), this.child2.getTupleDesc());
     }
 
     public void open() throws DbException, NoSuchElementException,
             TransactionAbortedException {
         // some code goes here
+        super.open();
+        this.t1 = null;
+        this.child1.open();
+        this.child2.open();
     }
 
     public void close() {
         // some code goes here
+        this.t1 = null;
+        this.child1.close();
+        this.child2.close();
+        super.close();
     }
 
     public void rewind() throws DbException, TransactionAbortedException {
         // some code goes here
+        this.t1 = null;
+        this.child1.rewind();
+        this.child2.rewind();
     }
 
     /**
@@ -96,6 +114,34 @@ public class Join extends Operator {
      */
     protected Tuple fetchNext() throws TransactionAbortedException, DbException {
         // some code goes here
+        // 每次返回一条符合条件的Tuple
+        if(this.t1 == null && this.child1.hasNext()){
+            this.t1 = this.child1.next();
+        }
+        while (this.t1 != null){
+            while (this.child2.hasNext()){
+                Tuple t2 = this.child2.next();
+                if(t2 == null){
+                    break;
+                }
+                if(!this.p.filter(t1, t2)){
+                    continue;
+                }
+                Tuple t = new Tuple(this.getTupleDesc());
+                for(int i = 0; i < t.getTupleDesc().numFields(); i++){
+                    if(i < t1.getTupleDesc().numFields()){
+                        t.setField(i, t1.getField(i));
+                    }else{
+                        t.setField(i, t2.getField(i - t1.getTupleDesc().numFields()));
+                    }
+                }
+                return t;
+            }
+            this.child2.rewind();
+            if(this.child1.hasNext()){
+                this.t1 = this.child1.next();
+            }
+        }
         return null;
     }
 

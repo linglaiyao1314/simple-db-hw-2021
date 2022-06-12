@@ -81,6 +81,7 @@ public class HeapFile implements DbFile { // 存储将文件转换成HeapPage
             int offset = pageNumber * BufferPool.getPageSize();
             int bufSize = BufferPool.getPageSize();
             byte[] pageData = new byte[bufSize];
+            System.out.println(this.getFile().getAbsolutePath());
             FileInputStream fileInputStream = new FileInputStream(this.getFile());
             // 跳过已读取的页
             fileInputStream.skip(offset);

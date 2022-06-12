@@ -1,8 +1,7 @@
 # 6.830 Lab 2: SimpleDB Operators
 
-**Assigned: Tue, Mar 9, 2021**<br>
+**Assigned: Tue, Mar 9, 2021**`<br>`
 **Due: Fri, Mar 19, 2021 11:59 PM EDT**
-
 
 <!--
 Version History:
@@ -10,8 +9,6 @@ Version History:
 
 3/1/12 : Initial version
 -->
-
-
 
 In this lab assignment, you will write a set of operators for SimpleDB to implement table modifications (e.g., insert
 and delete records), selections, joins, and aggregates. These will build on top of the foundation that you wrote in Lab
@@ -27,7 +24,7 @@ The remainder of this document gives some suggestions about how to start coding,
 you work through the lab, and discusses how to hand in your code. This lab requires you to write a fair amount of code,
 so we encourage you to **start early**!
 
-<a name="starting"></a>
+`<a name="starting"></a>`
 
 ## 1. Getting started
 
@@ -49,23 +46,23 @@ $ git pull upstream master
 
 **IDE users** will have update their project dependency to include the new library jars.
 For an easy solution, run
+
 ```
 ant eclipse
 ```
 
-again, and reopen the project with either Eclipse or IntelliJ. 
+again, and reopen the project with either Eclipse or IntelliJ.
 
 If you have made other
 changes to your project setup and do not want to lose them, you can also add the dependencies
 manually. For eclipse, under the package explorer, right click the project name
-(probably <tt>simple-db-hw</tt>),  and select **Properties**.  Choose **Java Build Path**
+(probably `<tt>`simple-db-hw`</tt>`),  and select **Properties**.  Choose **Java Build Path**
 on the left-hand-side, and click on the **Libraries** tab on the right-hand-side.  Push
 the **Add JARs...** button, select **zql.jar** and **jline-0.9.94.jar**, and push **OK**,
 followed by **OK**.  Your code should now compile. For IntelliJ, go to **Project Structure**
-under **File**, and under **Modules**, select the <tt>simpledb</tt> project, and navigate to
-the **Dependencies** tab. On the bottom of the pane, click on the <tt>+</tt> icon to add
-the jars as compile-time dependencies. 
-
+under **File**, and under **Modules**, select the `<tt>`simpledb`</tt>` project, and navigate to
+the **Dependencies** tab. On the bottom of the pane, click on the `<tt>`+`</tt>` icon to add
+the jars as compile-time dependencies.
 
 ### 1.2. Implementation hints
 
@@ -84,20 +81,16 @@ outline, including exercises, are given in Section 2 below.
 * Implement the operators `Filter` and `Join` and verify that their corresponding tests work. The Javadoc comments for
   these operators contain details about how they should work. We have given you implementations of
   `Project` and `OrderBy` which may help you understand how other operators work.
-
 * Implement `IntegerAggregator` and `StringAggregator`. Here, you will write the logic that actually computes an
   aggregate over a particular field across multiple groups in a sequence of input tuples. Use integer division for
   computing the average, since SimpleDB only supports integers. StringAggegator only needs to support the COUNT
   aggregate, since the other operations do not make sense for strings.
-
 * Implement the `Aggregate` operator. As with other operators, aggregates implement the `OpIterator` interface so that
   they can be placed in SimpleDB query plans. Note that the output of an `Aggregate` operator is an aggregate value of
   an entire group for each call to `next()`, and that the aggregate constructor takes the aggregation and grouping
   fields.
-
 * Implement the methods related to tuple insertion, deletion, and page eviction in `BufferPool`. You do not need to
   worry about transactions at this point.
-
 * Implement the `Insert` and `Delete` operators. Like all operators,  `Insert` and `Delete` implement
   `OpIterator`, accepting a stream of tuples to insert or delete and outputting a single tuple with an integer field
   that indicates the number of tuples inserted or deleted. These operators will need to call the appropriate methods
@@ -114,10 +107,10 @@ You'll also be able to use the provided SQL parser to run SQL queries against yo
 for a brief tutorial.
 
 Finally, you might notice that the iterators in this lab extend the
-`Operator` class instead of implementing the OpIterator interface. Because the implementation of <tt>next</tt>/<tt>
-hasNext</tt>
+`Operator` class instead of implementing the OpIterator interface. Because the implementation of `<tt>`next`</tt>`/`<tt>`
+hasNext`</tt>`
 is often repetitive, annoying, and error-prone, `Operator`
-implements this logic generically, and only requires that you implement a simpler <tt>readNext</tt>. Feel free to use
+implements this logic generically, and only requires that you implement a simpler `<tt>`readNext`</tt>`. Feel free to use
 this style of implementation, or just implement the `OpIterator` interface if you prefer. To implement the OpIterator
 interface, remove `extends Operator`
 from iterator classes, and in its place put `implements OpIterator`.
@@ -131,7 +124,6 @@ operators that will enable you to perform queries that are slightly more interes
 
 * *Filter*: This operator only returns tuples that satisfy a `Predicate` that is specified as part of its constructor.
   Hence, it filters out any tuples that do not match the predicate.
-
 * *Join*: This operator joins tuples from its two children according to a `JoinPredicate` that is passed in as part of
   its constructor. We only require a simple nested loops join, but you may explore more interesting join
   implementations. Describe your implementation in your lab writeup.
@@ -140,14 +132,14 @@ operators that will enable you to perform queries that are slightly more interes
 
 Implement the skeleton methods in:
 
-***  
+---
 
 * src/java/simpledb/execution/Predicate.java
 * src/java/simpledb/execution/JoinPredicate.java
 * src/java/simpledb/execution/Filter.java
 * src/java/simpledb/execution/Join.java
 
-***  
+---
 
 At this point, your code should pass the unit tests in PredicateTest, JoinPredicateTest, FilterTest, and JoinTest.
 Furthermore, you should be able to pass the system tests FilterTest and JoinTest.
@@ -174,13 +166,13 @@ do not need to worry about the situation where the number of groups exceeds avai
 
 Implement the skeleton methods in:
 
-***  
+---
 
 * src/java/simpledb/execution/IntegerAggregator.java
 * src/java/simpledb/execution/StringAggregator.java
 * src/java/simpledb/execution/Aggregate.java
 
-***  
+---
 
 At this point, your code should pass the unit tests IntegerAggregatorTest, StringAggregatorTest, and AggregateTest.
 Furthermore, you should be able to pass the AggregateTest system test.
@@ -203,35 +195,32 @@ the physical file on disk. You will need to ensure that the RecordID in the tupl
 
 Implement the remaining skeleton methods in:
 
-***  
+---
 
 * src/java/simpledb/storage/HeapPage.java
-* src/java/simpledb/storage/HeapFile.java<br>
+* src/java/simpledb/storage/HeapFile.java`<br>`
   (Note that you do not necessarily need to implement writePage at this point).
 
-***
+---
 
-
-
-To implement HeapPage, you will need to modify the header bitmap for methods such as <tt>insertTuple()</tt> and <tt>
-deleteTuple()</tt>. You may find that the <tt>getNumEmptySlots()</tt> and <tt>isSlotUsed()</tt> methods we asked you to
+To implement HeapPage, you will need to modify the header bitmap for methods such as `<tt>`insertTuple()`</tt>` and `<tt>`
+deleteTuple()`</tt>`. You may find that the `<tt>`getNumEmptySlots()`</tt>` and `<tt>`isSlotUsed()`</tt>` methods we asked you to
 implement in Lab 1 serve as useful abstractions. Note that there is a
-<tt>markSlotUsed</tt> method provided as an abstraction to modify the filled or cleared status of a tuple in the page
+`<tt>`markSlotUsed`</tt>` method provided as an abstraction to modify the filled or cleared status of a tuple in the page
 header.
 
-Note that it is important that the <tt>HeapFile.insertTuple()</tt>
-and <tt>HeapFile.deleteTuple()</tt> methods access pages using the <tt>BufferPool.getPage()</tt> method; otherwise, your
+Note that it is important that the `<tt>`HeapFile.insertTuple()`</tt>`
+and `<tt>`HeapFile.deleteTuple()`</tt>` methods access pages using the `<tt>`BufferPool.getPage()`</tt>` method; otherwise, your
 implementation of transactions in the next lab will not work properly.
 
-Implement the following skeleton methods in <tt>src/simpledb/BufferPool.java</tt>:
+Implement the following skeleton methods in `<tt>`src/simpledb/BufferPool.java`</tt>`:
 
-***  
+---
 
 * insertTuple()
 * deleteTuple()
 
-***  
-
+---
 
 These methods should call the appropriate methods in the HeapFile that belong to the table being modified (this extra
 level of indirection is needed to support other types of files &mdash; like indices &mdash; in the future).
@@ -251,7 +240,6 @@ returning a single tuple with one integer field, containing the count.
 
 * *Insert*: This operator adds the tuples it reads from its child operator to the `tableid` specified in its
   constructor. It should use the `BufferPool.insertTuple()` method to do this.
-
 * *Delete*: This operator deletes the tuples it reads from its child operator from the `tableid` specified in its
   constructor. It should use the `BufferPool.deleteTuple()` method to do this.
 
@@ -259,12 +247,12 @@ returning a single tuple with one integer field, containing the count.
 
 Implement the skeleton methods in:
 
-***  
+---
 
 * src/java/simpledb/execution/Insert.java
 * src/java/simpledb/execution/Delete.java
 
-***  
+---
 
 At this point, your code should pass the unit tests in InsertTest. We have not provided unit tests for `Delete`.
 Furthermore, you should be able to pass the InsertTest and DeleteTest system tests.
@@ -275,7 +263,7 @@ In Lab 1, we did not correctly observe the limit on the maximum number of pages 
 constructor argument `numPages`. Now, you will choose a page eviction policy and instrument any previous code that reads
 or creates pages to implement your policy.
 
-When more than <tt>numPages</tt> pages are in the buffer pool, one page should be evicted from the pool before the next
+When more than `<tt>`numPages`</tt>` pages are in the buffer pool, one page should be evicted from the pool before the next
 is loaded. The choice of eviction policy is up to you; it is not necessary to do something sophisticated. Describe your
 policy in the lab writeup.
 
@@ -296,16 +284,14 @@ page it evicts.
 
 Fill in the `flushPage()` method and additional helper methods to implement page eviction in:
 
-***  
+---
 
 * src/java/simpledb/storage/BufferPool.java
 
-***
-
-
+---
 
 If you did not implement `writePage()` in
-<tt>HeapFile.java</tt> above, you will also need to do that here. Finally, you should also implement `discardPage()` to
+`<tt>`HeapFile.java`</tt>` above, you will also need to do that here. Finally, you should also implement `discardPage()` to
 remove a page from the buffer pool *without* flushing it to disk. We will not test `discardPage()`
 in this lab, but it will be necessary for future labs.
 
@@ -318,7 +304,7 @@ eviction policy correctly, you will not evict enough pages, and will go over the
 
 You have now completed this lab. Good work!
 
-<a name="query_walkthrough"></a>
+`<a name="query_walkthrough"></a>`
 
 ### 2.6. Query walkthrough
 
@@ -408,7 +394,7 @@ SeqScan) or child operator (in the case of e.g., Join). The test program then re
 operator, which in turn pulls tuples from its children. As tuples are output from the
 `Join`, they are printed out on the command line.
 
-<a name="parser"></a>
+`<a name="parser"></a>`
 
 ### 2.7. Query Parser
 
@@ -428,7 +414,7 @@ contents:
 ```
 
 You can convert this into a SimpleDB table using the
-`convert` command (make sure to type <tt>ant</tt> first!):
+`convert` command (make sure to type `<tt>`ant`</tt>` first!):
 
 ```
 java -jar dist/simpledb.jar convert data.txt 2 "int,int"
@@ -490,19 +476,12 @@ bear in mind:
 
 * You must preface every field name with its table name, even if the field name is unique (you can use table name
   aliases, as in the example above, but you cannot use the AS keyword.)
-
 * Nested queries are supported in the WHERE clause, but not the FROM clause.
-
 * No arithmetic expressions are supported (for example, you can't take the sum of two fields.)
-
 * At most one GROUP BY and one aggregate column are allowed.
-
 * Set-oriented operators like IN, UNION, and EXCEPT are not allowed.
-
 * Only AND expressions in the WHERE clause are allowed.
-
 * UPDATE expressions are not supported.
-
 * The string operator LIKE is allowed, but must be written out fully (that is, the Postgres tilde [~] shorthand is not
   allowed.)
 
@@ -513,11 +492,8 @@ writeup describing your approach. This writeup should:
 
 * Describe any design decisions you made, including your choice of page eviction policy. If you used something other
   than a nested-loops join, describe the tradeoffs of the algorithm you chose.
-
 * Discuss and justify any changes you made to the API.
-
 * Describe any missing or incomplete elements of your code.
-
 * Describe how long you spent on the lab, and whether there was anything you found particularly difficult or confusing.
 
 ### 3.1. Collaboration
@@ -540,7 +516,7 @@ running the following command:
 $ zip -r submission.zip src/ lab2-writeup.txt
 ```
 
-<a name="bugs"></a>
+`<a name="bugs"></a>`
 
 ### 3.3. Submitting a bug
 
@@ -554,24 +530,22 @@ Please submit (friendly!) bug reports to [6.830-staff@mit.edu](mailto:6.830-staf
 include:
 
 * A description of the bug.
-
-* A <tt>.java</tt> file we can drop in the
+* A `<tt>`.java`</tt>` file we can drop in the
   `test/simpledb` directory, compile, and run.
-
-* A <tt>.txt</tt> file with the data that reproduces the bug. We should be able to convert it to a <tt>.dat</tt> file
+* A `<tt>`.txt`</tt>` file with the data that reproduces the bug. We should be able to convert it to a `<tt>`.dat`</tt>` file
   using `HeapFileEncoder`.
 
 You can also post on the class page on Piazza if you feel you have run into a bug.
 
-<a name="grading"></a>
+`<a name="grading"></a>`
 
 ### 3.4 Grading
 
 <p>75% of your grade will be based on whether or not your code passes the system test suite we will run over it. These tests will be a superset of the tests we have provided. Before handing in your code, you should make sure it produces no errors (passes all of the tests) from both  <tt>ant test</tt> and <tt>ant systemtest</tt>.
 
-**Important:** before testing, gradescope will replace your <tt>build.xml</tt>, <tt>HeapFileEncoder.java</tt> and the
-entire contents of the <tt>test</tt>
-directory with our version of these files. This means you cannot change the format of <tt>.dat</tt> files!  You should
+**Important:** before testing, gradescope will replace your `<tt>`build.xml`</tt>`, `<tt>`HeapFileEncoder.java`</tt>` and the
+entire contents of the `<tt>`test`</tt>`
+directory with our version of these files. This means you cannot change the format of `<tt>`.dat`</tt>` files!  You should
 also be careful changing our APIs. You should test that your code compiles the unmodified tests.
 
 You should get immediate feedback and error outputs for failed tests (if any) from gradescope after submission. The
